@@ -95,7 +95,9 @@ describe('UserService', () => {
 
       const result = await service.findByEmail('test@example.com');
 
-      expect(service.findCachedIdByEmail).toHaveBeenCalledWith('test@example.com');
+      expect(service.findCachedIdByEmail).toHaveBeenCalledWith(
+        'test@example.com',
+      );
       expect(service.findCachedUserById).toHaveBeenCalledWith('1');
       expect(result).toEqual(mockUser);
       expect(loggerService.log).toHaveBeenCalledWith(
@@ -109,7 +111,9 @@ describe('UserService', () => {
 
       const result = await service.findByEmail('test@example.com');
 
-      expect(service.findCachedIdByEmail).toHaveBeenCalledWith('test@example.com');
+      expect(service.findCachedIdByEmail).toHaveBeenCalledWith(
+        'test@example.com',
+      );
       expect(result).toEqual(mockUser);
       expect(loggerService.log).toHaveBeenCalledWith(
         'User with e-mail test@example.com info was found in database',
@@ -123,7 +127,9 @@ describe('UserService', () => {
 
       const result = await service.findByEmail('test@example.com');
 
-      expect(service.findCachedIdByEmail).toHaveBeenCalledWith('test@example.com');
+      expect(service.findCachedIdByEmail).toHaveBeenCalledWith(
+        'test@example.com',
+      );
       expect(service.findCachedUserById).toHaveBeenCalledWith('1');
       expect(result).toEqual(mockUser);
       expect(loggerService.log).toHaveBeenCalledWith(
@@ -254,7 +260,9 @@ describe('UserService', () => {
     });
 
     it('should handle errors in cache service', async () => {
-      (cacheService.get as jest.Mock).mockRejectedValueOnce(new Error('Cache error'));
+      (cacheService.get as jest.Mock).mockRejectedValueOnce(
+        new Error('Cache error'),
+      );
 
       await expect(service.findByIdSafe(1)).rejects.toThrow(
         BadRequestException,
@@ -295,7 +303,9 @@ describe('UserService', () => {
     it('should return false if user id not found in cache', async () => {
       (cacheService.get as jest.Mock).mockResolvedValueOnce(null);
 
-      const result = await service.findCachedIdByEmail('nonexistent@example.com');
+      const result = await service.findCachedIdByEmail(
+        'nonexistent@example.com',
+      );
 
       expect(cacheService.get).toHaveBeenCalledWith('nonexistent@example.com');
       expect(result).toBe(false);

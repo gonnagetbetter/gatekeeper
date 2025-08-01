@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExecutionContext, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from '../auth.service';
 
@@ -46,7 +50,9 @@ describe('AuthGuard', () => {
     });
 
     it('should throw UnauthorizedException if authorization header is missing', () => {
-      expect(() => guard.canActivate(mockContext)).toThrow(UnauthorizedException);
+      expect(() => guard.canActivate(mockContext)).toThrow(
+        UnauthorizedException,
+      );
       expect(mockContext.switchToHttp).toHaveBeenCalled();
       expect(mockContext.switchToHttp().getRequest).toHaveBeenCalled();
     });
@@ -54,7 +60,9 @@ describe('AuthGuard', () => {
     it('should throw UnauthorizedException if authorization header is not a string', () => {
       mockRequest.headers.authorization = ['Bearer token'];
 
-      expect(() => guard.canActivate(mockContext)).toThrow(UnauthorizedException);
+      expect(() => guard.canActivate(mockContext)).toThrow(
+        UnauthorizedException,
+      );
       expect(mockContext.switchToHttp).toHaveBeenCalled();
       expect(mockContext.switchToHttp().getRequest).toHaveBeenCalled();
     });
@@ -62,7 +70,9 @@ describe('AuthGuard', () => {
     it('should throw UnauthorizedException if token format is invalid', () => {
       mockRequest.headers.authorization = 'InvalidFormat';
 
-      expect(() => guard.canActivate(mockContext)).toThrow(UnauthorizedException);
+      expect(() => guard.canActivate(mockContext)).toThrow(
+        UnauthorizedException,
+      );
       expect(mockContext.switchToHttp).toHaveBeenCalled();
       expect(mockContext.switchToHttp().getRequest).toHaveBeenCalled();
     });

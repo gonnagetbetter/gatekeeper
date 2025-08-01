@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { LoggerService } from '../logger/logger.service';
 
@@ -19,6 +19,7 @@ export class CacheService {
       }
     } catch (e) {
       this.logger.error(`Error getting data from cache with key ${key}`, e);
+      throw new HttpException(e, 500);
     }
     this.logger.log(`Data with key ${key} was not found in cache`);
     return null;
@@ -39,6 +40,7 @@ export class CacheService {
       this.logger.log(`Data with key ${key} was cached successfully`);
     } catch (e) {
       this.logger.error(`Error caching data with key ${key}`, e);
+      throw new HttpException(e, 500);
     }
   }
 
@@ -62,6 +64,7 @@ export class CacheService {
       this.logger.log('Multiple keys were cached successfully');
     } catch (e) {
       this.logger.error(`Error caching multiple keys`, e);
+      throw new HttpException(e, 500);
     }
   }
 
@@ -71,16 +74,19 @@ export class CacheService {
   ): Promise<void> {
     try {
       const currentTtl = await this.redis.ttl(key);
+
       if (currentTtl > expirationInSeconds) {
         return;
       } else {
         await this.redis.expire(key, expirationInSeconds);
+
         this.logger.log(
           `TTL with key ${key} was set to ${expirationInSeconds / 3600} hours`,
         );
       }
     } catch (e) {
       this.logger.error(`Error prolonging ${key} TTL`, e);
+      throw new HttpException(e, 500);
     }
   }
 }

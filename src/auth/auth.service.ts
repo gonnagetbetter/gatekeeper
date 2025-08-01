@@ -19,10 +19,12 @@ export class AuthService {
     this.logger.log('Received sign up request');
 
     const user = await this.userService.findByEmail(dto.email);
+
     if (user) {
       this.logger.log(`User with e-mail ${dto.email} already exists`);
       throw new BadRequestException('Email already exists');
     }
+
     const { password, ...rest } = dto;
 
     const salt = await bcrypt.genSalt();
@@ -35,7 +37,9 @@ export class AuthService {
     };
 
     await this.userService.create(userData);
+
     this.logger.log(`User with e-mail ${userData.email} created`);
+
     return {
       success: true,
     };
@@ -57,6 +61,7 @@ export class AuthService {
       this.logger.log(`Invalid credentials for user ${user.email}`);
       throw new BadRequestException('Invalid credentials');
     }
+
     const payload = {
       sub: user.id,
       email: user.email,

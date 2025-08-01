@@ -47,13 +47,17 @@ describe('LoggerService', () => {
       exitOnError: false,
       transports: expect.any(Array),
     });
-    expect(winston.transports.Console).toHaveBeenCalledWith(expect.objectContaining({
-      level: 'info',
-    }));
-    expect(winston.transports.File).toHaveBeenCalledWith(expect.objectContaining({
-      filename: 'error.log',
-      level: 'error',
-    }));
+    expect(winston.transports.Console).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: 'info',
+      }),
+    );
+    expect(winston.transports.File).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filename: 'error.log',
+        level: 'error',
+      }),
+    );
   });
 
   describe('log', () => {
